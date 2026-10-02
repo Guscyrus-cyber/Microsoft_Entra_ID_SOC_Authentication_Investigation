@@ -82,8 +82,8 @@ This lab introduces a realistic SOC Tier 1/Tier 2 identity and authentication in
 
 Microsoft Entra ID is Microsoft's cloud-based identity and access management platform. In an enterprise environment, it records authentication activity involving users, applications, devices, IP addresses, authentication methods, and security controls. For a SOC analyst, these identity logs are important because compromised credentials and suspicious sign-ins are common starting points for security incidents.
 
-### In the preparation phase, I created SOC Test User and intentionally generated different authentication events. Microsoft Entra ID has now recorded successful, failed, and interrupted sign-in attempts, giving me a real authentication data to investigate rather than relying on a prepared dataset.\
-\
+In the preparation phase, I created SOC Test User and intentionally generated different authentication events. Microsoft Entra ID has now recorded successful, failed, and interrupted sign-in attempts, giving me a real authentication data to investigate rather than relying on a prepared dataset.
+
 What I Will Do in This Lab
 
 I will work through the authentication activity from the perspective of a SOC analyst. The investigation will include:
@@ -120,20 +120,17 @@ Alert / Sign-in Event → Evidence Collection → Authentication Analysis → Co
 
 By the end of the lab, a SOC analyze will be able to look at a Microsoft Entra ID sign-in event and explain what happened, which account was involved, where the attempt originated, why it failed or succeeded, whether it appears suspicious, what additional evidence should be checked, and what action a SOC analyst should take.
 
-### This will also establish a foundation for later Microsoft Sentinel and KQL identity investigations, where the same type of authentication activity can be investigated and correlated at SIEM level.\
-\
+This will also establish a foundation for later Microsoft Sentinel and KQL identity investigations, where the same type of authentication activity can be investigated and correlated at SIEM level.
+
 Step 1 — Opening the Failed Sign-In Event
 
-### \
-\
-\
 Status: Failure\
 Sign-in error code: 50126 which is Microsoft Entra ID error code\
 IP address: 108.28.79.19\
 Location: Lorton, Virginia, US\
 Conditional Access: Not Applied\
-Authentication: Single-factor authentication (Image 1)\
-\
+Authentication: Single-factor authentication (Image 1)
+
 Step 2 — Initial SOC Triage
 
 From the event, I can establish:
@@ -164,11 +161,7 @@ From the event, I can establish:
 
 At this point, I know what failed and which account was targeted, but I still don't have enough evidence to decide whether this was simply a mistyped password or suspicious activity. (Images 2, 3, and 4)
 
-\
-\
-\
-
-## Step 3 — Location Analysis
+Step 3 — Location Analysis
 
 The Location tab provides information about the network origin of the failed authentication attempt.
 
@@ -193,10 +186,7 @@ The geographic location alone does not prove that an authentication attempt is l
 In this event, the combination of error code 50126 and source IP 108.28.79.19 establishes that an invalid credential attempt against SOC Test User originated from this network address.\
 (Image 5)
 
-\
-\
 Step 4 — Device Information Analysis
-------------------------------------
 
 The Device info tab provides additional context about the system used for the failed authentication attempt.
 
@@ -230,10 +220,8 @@ At this stage, the investigation has established:
 
 User → Failed password → Source IP → Geographic location → Browser → Operating system → Device management status (Image 6)
 
-\
-\
 Step 5 — Authentication Details Analysis
-----------------------------------------
+
 
 The event shows:
 
@@ -245,7 +233,7 @@ The event shows:
 
 - Result detail: Invalid username or password
 
-### What false Means
+**What false Means**
 
 Succeeded: false means the password authentication attempt failed.
 
@@ -263,10 +251,8 @@ The authentication failed because Microsoft Entra ID could not validate the supp
 
 This uncertainty is realistic in SOC investigations. The next step is to examine surrounding authentication events and determine whether a pattern of failures exists. (Image 7)
 
-\
-\
 Step 6 — Authentication Result Analysis
----------------------------------------
+
 
 The Authentication Details confirm the following:
 
@@ -280,14 +266,13 @@ The Authentication Details confirm the following:
 
 - Event time: August 15, 2026, 11:53:48 PM
 
-### SOC Finding
+**SOC Finding**
 
 Microsoft Entra ID received a password-based authentication attempt for SOC Test User, but the supplied credentials could not be validated.
 
-At this stage, this event serves as a baseline failed-authentication event.\
-\
+At this stage, this event serves as a baseline failed-authentication event.
+
 Step 7 — Conditional Access Analysis
-----------------------------------------------------------------------------
 
 The Conditional Access tab shows:
 
@@ -307,7 +292,7 @@ Conditional Access can enforce security requirements such as MFA, compliant devi
 
 This is useful evidence because the failure was caused by the credential validation itself (50126), rather than a Conditional Access policy blocking access. (Image 8)\
 
-## Step 8 — Correlation of Repeated Failed Sign-Ins
+Step 8 — Correlation of Repeated Failed Sign-Ins
 
 The event currently open is another 50126 failure:
 
@@ -337,10 +322,8 @@ A single 50126 failure can easily result from a mistyped password. Multiple fail
 
 However, these events should not yet be classified as brute force. Additional evidence is required, especially the source IP, device, application, and surrounding successful authentication events. (Image 9)
 
-\
-\
 Step 9 — MFA Interruption Analysis
-----------------------------------
+
 
 This event at 11:58:44 PM is different from the earlier 50126 failures.
 
@@ -372,10 +355,8 @@ Repeated credential failures → later authentication progression → MFA requir
 
 A SOC analyst would examine whether these events belong to the same source and whether a successful authentication occurred afterward. (Image 10)
 
-\
-\
 Step 10 A — Correlating the MFA Events
---------------------------------------
+
 
 The 11:57:52 PM event shows:
 
@@ -405,26 +386,20 @@ The authentication timeline currently contains:
 11:57:52 → MFA authentication interrupted\
 11:58:44 → MFA authentication interrupted (Image 11)
 
-\
-\
-\
 Step 10 B: Investigate the Event Between Failure and MFA
---------------------------------------------------------
+
 
 There is another event visible at:
 
 8/15/2026, 11:54:56 PM
 
 The 11:54:56 PM confirms another MFA-interrupted event, so further repetition would add little value. (Image 12)\
-\
-\
-\
+
 Step 10 C— Simulated Suspicious Authentication by Kali Linux
------------------------------------------------------------------------------------------------------------------
 
 The next objective is to generate controlled failed authentication attempts from Kali Linux against the lab account using deliberately incorrect passwords. These events will then be examined in Microsoft Entra ID and compared with the baseline events.
 
-## Step 11 — Kali Linux Network Identification
+Step 11 — Kali Linux Network Identification
 
 The Kali Linux network configuration confirms:
 
@@ -442,31 +417,7 @@ The Kali Linux network configuration confirms:
 
 The address 192.168.1.176 is the private LAN address of the Kali system. Microsoft Entra ID normally records the public Internet-facing IP address, not this private address. (Images 13 and 14)
 
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
 Step 12 — Kali Linux Public IP Confirmed
-----------------------------------------
 
 The Kali Linux system's public IP address is:
 
@@ -478,7 +429,7 @@ This means the Mac and Kali Linux are currently reaching the Internet through th
 
 Device/browser information and timestamps will be important for attribution.
 
-## Step 13 A— Generate the Controlled Failed Sign-In
+Step 13 A— Generate the Controlled Failed Sign-In
 
 1.  Go to the Microsoft sign-in page.
 
@@ -492,11 +443,9 @@ This creates a known test event:
 
 Kali Linux → Firefox → 108.28.79.19 → incorrect password → expected Entra 50126
 
-That event can then be located and investigated in the Entra logs. (Image 15)\
-\
-\
+That event can then be located and investigated in the Entra logs. (Image 15)
+
 Step 13 B— Controlled Failed Authentication Generated
-------------------------------------------------------------------------------
 
 The Microsoft login page displays:
 
@@ -508,7 +457,7 @@ Kali Linux → Firefox → SOC Test User → Incorrect password → Authenticati
 
 The event occurred at approximately 7:44 PM local time.
 
-### Expected SOC Evidence
+### SOC Evidence
 
 Microsoft Entra ID should generate a new sign-in event containing approximately:
 
@@ -522,13 +471,13 @@ Microsoft Entra ID should generate a new sign-in event containing approximately:
 
 - Browser: Firefox
 
-### The browser and operating-system fields will be particularly useful because the public IP is shared with the macOS system.\
-\
+The browser and operating-system fields will be particularly useful because the public IP is shared with the macOS system.
+
 Step 14 — Find the Kali Event in Entra ID
 
 Microsoft Azure → SOC Test User → Sign-in logs
 
-## Step 15 — Kali Failed Sign-In Located
+Step 15 — Kali Failed Sign-In Located
 
 The newest event shows:
 
@@ -546,12 +495,7 @@ The newest event shows:
 
 This is very likely the controlled failed authentication generated from Kali. The displayed time differs from the screenshot time, so the next step is to verify attribution using the device/browser evidence, rather than relying on time alone. (Image 16)
 
-\
-\
-\
-\
 Step 16 — Kali Linux Event Confirmed
-------------------------------------
 
 The event has now been successfully attributed to the Kali Linux authentication test.
 
@@ -597,7 +541,7 @@ Kali Linux → Firefox → SOC Test User → Incorrect password → Entra ID →
 
 This is an important SOC lesson: an IP address alone may not uniquely identify a device. Authentication investigations should correlate multiple fields, including timestamp, operating system, browser, user, authentication result, and source IP. (Image 17)
 
-## Step 17 — Kali Authentication Evidence Confirmed
+Step 17 — Kali Authentication Evidence Confirmed
 
 The Authentication Details provide the final confirmation for the simulated failed sign-in:
 
