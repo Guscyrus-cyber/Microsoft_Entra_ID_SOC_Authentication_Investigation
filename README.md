@@ -488,7 +488,7 @@ The newest event shows:
 
 - IP address: 108.28.79.19
 
-This is very likely the controlled failed authentication generated from Kali. The displayed time differs from the screenshot time, so the next step is to verify attribution using the device/browser evidence, rather than relying on time alone. (Image 16)
+This is very likely the controlled failed authentication generated from Kali. The displayed time differs from the screenshot time, so the next step is to verify attribution using the device/browser evidence, rather than relying on time alone. (Images 16 and 17)
 
 Step 16 — Kali Linux Event Confirmed
 
@@ -534,7 +534,7 @@ The investigation therefore successfully demonstrates:
 
 Kali Linux → Firefox → SOC Test User → Incorrect password → Entra ID → 50126 authentication failure
 
-This is an important SOC lesson: an IP address alone may not uniquely identify a device. Authentication investigations should correlate multiple fields, including timestamp, operating system, browser, user, authentication result, and source IP. (Image 17)
+This is an important SOC lesson: an IP address alone may not uniquely identify a device. Authentication investigations should correlate multiple fields, including timestamp, operating system, browser, user, authentication result, and source IP. (Image 18)
 
 Step 17 — Kali Authentication Evidence Confirmed
 
@@ -572,4 +572,4 @@ Because the lab deliberately simulated an incorrect-password attempt against an 
 
 T1110 — Brute Force
 
-However, a single failed password attempt alone would not normally be sufficient evidence to declare a real-world brute-force attack. Repeated attempts or additional correlated evidence would be expected. (Image 18)
+However, a single failed password attempt alone would not normally be sufficient evidence to declare a real-world brute-force attack. Repeated attempts or additional correlated evidence would be expected. (Image 19)
